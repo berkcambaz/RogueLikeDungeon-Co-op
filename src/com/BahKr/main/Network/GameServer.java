@@ -71,7 +71,8 @@ public class GameServer extends Thread {
 
     public void addConnection(PlayerMP player, Packet00Login packet) {
         boolean alreadyConnected = false;
-        for (PlayerMP p : this.connectedPlayers) {
+        for (PlayerMP p : connectedPlayers) {
+            System.out.println(p.getUsername());
             if (player.getUsername().equalsIgnoreCase(p.getUsername())) {
                 if (p.ipAddress == null) {
                     p.ipAddress = player.ipAddress;
@@ -81,23 +82,17 @@ public class GameServer extends Thread {
                 }
                 alreadyConnected = true;
             } else {
-                // relay to the current connected player that there is a new
-                // player
                 sendData(packet.getData(), p.ipAddress, p.port);
-
-                // relay to the new player that the currently connect player
-                // exists
-                packet = new Packet00Login(p.getUsername(), (int) p.x, (int) p.y);
-                sendData(packet.getData(), player.ipAddress, player.port);
+                sendData(new Packet00Login(p.getUsername(), (int) p.x, (int) p.y).getData(), player.ipAddress, player.port);
             }
         }
         if (!alreadyConnected) {
-            this.connectedPlayers.add(player);
+            connectedPlayers.add(player);
         }
     }
 
     public void removeConnection(Packet01Disconnect packet) {
-        this.connectedPlayers.remove(getPlayerMPIndex(packet.getUsername()));
+        connectedPlayers.remove(getPlayerMPIndex(packet.getUsername()));
         packet.writeData(this);
     }
 
@@ -124,7 +119,7 @@ public class GameServer extends Thread {
     public void sendData(byte[] data, InetAddress ipAddress, int port) {
             DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
             try {
-                this.socket.send(packet);
+                socket.send(packet);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -25,7 +25,9 @@ public class GameClient extends Thread {
         try {
             this.socket = new DatagramSocket();
             this.ipAddress = InetAddress.getByName(ipAddress);
-        } catch (SocketException | UnknownHostException e) {
+        } catch (SocketException e) {
+            e.printStackTrace();
+        } catch (UnknownHostException e) {
             e.printStackTrace();
         }
     }

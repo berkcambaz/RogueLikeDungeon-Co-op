@@ -6,6 +6,7 @@ import com.BahKr.main.Input.KeyInput;
 import com.BahKr.main.Network.GameClient;
 import com.BahKr.main.Network.GameServer;
 import com.BahKr.main.Network.Packet.Packet00Login;
+import com.BahKr.main.Network.Packet.Packet01Disconnect;
 import com.BahKr.main.State.State;
 import com.BahKr.main.State.States.GameState;
 import com.BahKr.main.State.States.MenuState;
@@ -87,7 +88,7 @@ public class Game extends Canvas implements Runnable {
         long initialTime = System.nanoTime();
         boolean RENDER_TIME = true;
         float UPS = 60.f;
-        float FPS = 10000.f;
+        float FPS = 75.f;
         final double timeU = 1000000000 / UPS;
         final double timeF = 1000000000 / FPS;
         double deltaU = 0, deltaF = 0;
@@ -166,6 +167,10 @@ public class Game extends Canvas implements Runnable {
 
     public World getWorld() {
         return world;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public static void main(String[] args) {
