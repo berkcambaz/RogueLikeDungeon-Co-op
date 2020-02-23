@@ -12,5 +12,5 @@ Usage :<br>
   7 - Write your name and you will see that there are 2 players. (If you want to add more than 2 players, just go to 4th step and repeat)<br>
   
 Controls : <br>
-  Movement - W, A ,S, D
+  Movement - W, A ,S, D <br>
   Shooting - Left click
