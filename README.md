@@ -9,4 +9,8 @@ Usage :<br>
   4 - Make sure that you have opened one game with server.<br>
   5 - Open the game one more time without closing the first one (The server).<br>
   6 - Click no so you don't run game with server twice.<br>
-  7 - Write your name and you will see that there are 2 players. (If you want to add more than 2 players, just go to 4th step and repeat)
+  7 - Write your name and you will see that there are 2 players. (If you want to add more than 2 players, just go to 4th step and repeat)<br>
+  
+Controls : <br>
+  Movement - W, A ,S, D
+  Shooting - Left click
