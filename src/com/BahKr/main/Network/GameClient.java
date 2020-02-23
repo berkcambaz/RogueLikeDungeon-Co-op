@@ -1,11 +1,9 @@
 package com.BahKr.main.Network;
 
+import com.BahKr.main.GameObject.Entity.Entities.Bullet;
 import com.BahKr.main.GameObject.Entity.Entities.PlayerMP;
 import com.BahKr.main.Handler;
-import com.BahKr.main.Network.Packet.Packet;
-import com.BahKr.main.Network.Packet.Packet00Login;
-import com.BahKr.main.Network.Packet.Packet01Disconnect;
-import com.BahKr.main.Network.Packet.Packet02Move;
+import com.BahKr.main.Network.Packet.*;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -25,9 +23,7 @@ public class GameClient extends Thread {
         try {
             this.socket = new DatagramSocket();
             this.ipAddress = InetAddress.getByName(ipAddress);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        } catch (UnknownHostException e) {
+        } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
         }
     }
@@ -66,6 +62,11 @@ public class GameClient extends Thread {
             case MOVE:
                 packet = new Packet02Move(data);
                 handleMove((Packet02Move) packet);
+                break;
+            case SHOOT:
+                packet = new Packet03Shoot(data);
+                handleShoot((Packet03Shoot) packet);
+                break;
         }
     }
 
@@ -87,5 +88,9 @@ public class GameClient extends Thread {
 
     private void handleMove(Packet02Move packet) {
         handler.getWorld().movePlayer(packet.getUsername(), packet.getX(), packet.getY());
+    }
+
+    private void handleShoot(Packet03Shoot packet){
+        handler.getWorld().bullets.add(new Bullet(handler, packet.getX(), packet.getY(), packet.getRadius(), packet.getVelX(), packet.getVelY()));
     }
 }

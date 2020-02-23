@@ -1,11 +1,9 @@
 package com.BahKr.main.Network;
 
+import com.BahKr.main.GameObject.Entity.Entities.Bullet;
 import com.BahKr.main.GameObject.Entity.Entities.PlayerMP;
 import com.BahKr.main.Handler;
-import com.BahKr.main.Network.Packet.Packet;
-import com.BahKr.main.Network.Packet.Packet00Login;
-import com.BahKr.main.Network.Packet.Packet01Disconnect;
-import com.BahKr.main.Network.Packet.Packet02Move;
+import com.BahKr.main.Network.Packet.*;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -38,7 +36,7 @@ public class GameServer extends Thread {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
+            parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
         }
     }
 
@@ -55,24 +53,28 @@ public class GameServer extends Thread {
                 System.out.println("[" + address.getHostAddress() + ":" + port + "] "
                         + ((Packet00Login) packet).getUsername() + " has connected...");
                 PlayerMP player = new PlayerMP(handler, 100, 100, ((Packet00Login) packet).getUsername(), address, port);
-                this.addConnection(player, (Packet00Login) packet);
+                addConnection(player, (Packet00Login) packet);
                 break;
             case DISCONNECT:
                 packet = new Packet01Disconnect(data);
                 System.out.println("[" + address.getHostAddress() + ":" + port + "] "
                         + ((Packet01Disconnect) packet).getUsername() + " has left...");
-                this.removeConnection((Packet01Disconnect) packet);
+                removeConnection((Packet01Disconnect) packet);
                 break;
             case MOVE:
                 packet = new Packet02Move(data);
-                this.handleMove(((Packet02Move) packet));
+                handleMove(((Packet02Move) packet));
+                break;
+            case SHOOT:
+                packet = new Packet03Shoot(data);
+                handleShoot((Packet03Shoot) packet);
+                break;
         }
     }
 
     public void addConnection(PlayerMP player, Packet00Login packet) {
         boolean alreadyConnected = false;
         for (PlayerMP p : connectedPlayers) {
-            System.out.println(p.getUsername());
             if (player.getUsername().equalsIgnoreCase(p.getUsername())) {
                 if (p.ipAddress == null) {
                     p.ipAddress = player.ipAddress;
@@ -117,12 +119,12 @@ public class GameServer extends Thread {
     }
 
     public void sendData(byte[] data, InetAddress ipAddress, int port) {
-            DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
-            try {
-                socket.send(packet);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
+        try {
+            socket.send(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void sendDataToAllClients(byte[] data) {
@@ -141,4 +143,8 @@ public class GameServer extends Thread {
         }
     }
 
+    private void handleShoot(Packet03Shoot packet){
+        handler.getWorld().bullets.add(new Bullet(handler, packet.getX(), packet.getY(), packet.getRadius(), packet.getVelX(), packet.getVelY()));
+        packet.writeData(this);
+    }
 }

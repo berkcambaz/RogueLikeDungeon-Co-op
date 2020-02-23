@@ -3,6 +3,7 @@ package com.BahKr.main;
 import com.BahKr.main.GameObject.Entity.Entities.Player;
 import com.BahKr.main.GameObject.Entity.Entities.PlayerMP;
 import com.BahKr.main.Input.KeyInput;
+import com.BahKr.main.Input.MouseInput;
 import com.BahKr.main.Network.GameClient;
 import com.BahKr.main.Network.GameServer;
 import com.BahKr.main.Network.Packet.Packet00Login;
@@ -24,7 +25,10 @@ public class Game extends Canvas implements Runnable {
 
     private State gameState;
     private State menuState;
+
     private KeyInput keyInput;
+    private MouseInput mouseInput;
+
     private Handler handler;
     private World world;
     private Player player;
@@ -37,6 +41,7 @@ public class Game extends Canvas implements Runnable {
         this.height = height;
 
         this.addKeyListener(keyInput = new KeyInput());
+        this.addMouseListener(mouseInput = new MouseInput());
 
         new Window(width, height, title, this);
         handler = new Handler(this);
@@ -126,6 +131,7 @@ public class Game extends Canvas implements Runnable {
 
     public void tick() {
         keyInput.tick();
+        mouseInput.tick();
         if (State.getState() != null) {
             State.getState().tick();
         }
@@ -163,6 +169,10 @@ public class Game extends Canvas implements Runnable {
 
     public KeyInput getKeyInput() {
         return keyInput;
+    }
+
+    public MouseInput getMouseInput() {
+        return mouseInput;
     }
 
     public World getWorld() {

@@ -8,36 +8,43 @@ import java.util.LinkedList;
 
 public class World {
     private LinkedList<GameObject> obj = new LinkedList<>();
+    public LinkedList<GameObject> bullets = new LinkedList<>();
 
-    public World(){
+    public World() {
 
     }
 
-    public void tick(){
-        for (int i = 0; i < obj.size(); i++){
+    public void tick() {
+        for (int i = 0; i < obj.size(); i++) {
             obj.get(i).tick();
         }
-    }
-
-    public void render(Graphics g){
-        for (int i = 0; i < obj.size(); i++){
-            obj.get(i).render(g);
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).tick();
         }
     }
 
-    public synchronized void addObj(GameObject obj){
+    public void render(Graphics g) {
+        for (int i = 0; i < obj.size(); i++) {
+            obj.get(i).render(g);
+        }
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).render(g);
+        }
+    }
+
+    public synchronized void addObj(GameObject obj) {
         this.obj.add(obj);
     }
 
-    public void removeObj(GameObject obj){
+    public void removeObj(GameObject obj) {
         this.obj.remove(obj);
     }
 
-    public GameObject getObj(int i){
+    public GameObject getObj(int i) {
         return obj.get(i);
     }
 
-    public synchronized LinkedList<GameObject> getObjList(){
+    public synchronized LinkedList<GameObject> getObjList() {
         return obj;
     }
 

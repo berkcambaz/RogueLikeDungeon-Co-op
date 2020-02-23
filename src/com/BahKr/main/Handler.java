@@ -1,6 +1,7 @@
 package com.BahKr.main;
 
 import com.BahKr.main.Input.KeyInput;
+import com.BahKr.main.Input.MouseInput;
 import com.BahKr.main.World.World;
 
 public class Handler {
@@ -24,6 +25,10 @@ public class Handler {
 
     public KeyInput getKeyInput(){
         return game.getKeyInput();
+    }
+
+    public MouseInput getMouseInput(){
+        return game.getMouseInput();
     }
 
     public World getWorld(){
