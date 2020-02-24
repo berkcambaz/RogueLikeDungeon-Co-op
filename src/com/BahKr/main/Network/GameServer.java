@@ -1,6 +1,5 @@
 package com.BahKr.main.Network;
 
-import com.BahKr.main.GameObject.Entity.Entities.Bullet;
 import com.BahKr.main.GameObject.Entity.Entities.PlayerMP;
 import com.BahKr.main.Handler;
 import com.BahKr.main.Network.Packet.*;
@@ -143,8 +142,7 @@ public class GameServer extends Thread {
         }
     }
 
-    private void handleShoot(Packet03Shoot packet){
-        handler.getWorld().bullets.add(new Bullet(handler, packet.getX(), packet.getY(), packet.getRadius(), packet.getVelX(), packet.getVelY()));
+    private void handleShoot(Packet03Shoot packet) {
         packet.writeData(this);
     }
 }
